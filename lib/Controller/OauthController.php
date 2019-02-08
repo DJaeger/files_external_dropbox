@@ -80,13 +80,13 @@ class OauthController extends Controller {
 			$dropbox = new \Kunnu\Dropbox\Dropbox($app);
 			$authHelper = $dropbox->getAuthHelper();
 
-			if ($step == 1) {
+			if ($step === 1) {
 				$authUrl = $authHelper->getAuthUrl($redirect);
 				return new DataResponse([
 					'status' => 'success',
 					'data' => ['url' => $authUrl]
 				]);
-			} else if ($step == 2 && isset($code)) {
+			} else if ($step === 2 && isset($code)) {
 				try {
 					$accessToken = $authHelper->getAccessToken($code, null, $redirect);
 					return new DataResponse([

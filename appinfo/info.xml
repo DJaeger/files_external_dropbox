@@ -1,7 +1,9 @@
 <?xml version="1.0"?>
-<info>
+<info xmlns:xsi= "http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://apps.nextcloud.com/schema/apps/info.xsd">
 	<id>files_external_dropbox</id>
 	<name>External Storage backend for Dropbox</name>
+	<summary>Integrate Dropbox as an external storage</summary>
 	<description>
 		This application enables integrating Dropbox external storages via the
 		Dropbox API v2.
@@ -17,33 +19,33 @@
 		configuration options in the 'Storage' section of admin and user
 		settings, respectively.
 	</description>
-	<summary>Integrate Dropbox as an external storage</summary>
+
+	<version>1.1.0</version>
 	<licence>agpl</licence>
 	<author>Robin Appelman</author>
 	<author>Hemant Mann</author>
-	<version>1.1.0</version>
-	<category>files</category>
+
+	<types>
+		<filesystem/>
+	</types>
+
 	<documentation>
-		<admin>
-			https://docs.nextcloud.com/server/12/admin_manual/configuration_files/external_storage/dropbox.html
-		</admin>
+		<admin>https://docs.nextcloud.com/server/12/admin_manual/configuration_files/external_storage/dropbox.html</admin>
 	</documentation>
+
+	<category>files</category>
+
+	<website>https://github.com/icewind1991/files_external_dropbox/</website>
+	<bugs>https://github.com/icewind1991/files_external_dropbox/issues</bugs>
+	<repository type="git">https://github.com/icewind1991/files_external_dropbox.git</repository>
 	<screenshot>
 		https://raw.githubusercontent.com/icewind1991/files_external_dropbox/master/screenshots/screenshots-app-external-storage-dropbox.jpg
 	</screenshot>
 	<screenshot>
 		https://raw.githubusercontent.com/icewind1991/files_external_dropbox/master/screenshots/settings.png
 	</screenshot>
-	<types>
-		<filesystem/>
-	</types>
 
 	<dependencies>
 		<nextcloud min-version="14.0" max-version="15.0"/>
 	</dependencies>
-	<website>https://github.com/icewind1991/files_external_dropbox/</website>
-	<bugs>https://github.com/icewind1991/files_external_dropbox/issues</bugs>
-	<repository type="git">
-		https://github.com/icewind1991/files_external_dropbox.git
-	</repository>
 </info>
