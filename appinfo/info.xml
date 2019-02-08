@@ -18,7 +18,7 @@
 		settings, respectively.
 	</description>
 	<summary>Integrate Dropbox as an external storage</summary>
-	<licence>GPLv2</licence>
+	<licence>agpl</licence>
 	<author>Robin Appelman</author>
 	<author>Hemant Mann</author>
 	<version>1.1.0</version>
