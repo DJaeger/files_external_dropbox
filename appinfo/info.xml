@@ -19,33 +19,26 @@
 		configuration options in the 'Storage' section of admin and user
 		settings, respectively.
 	</description>
-
 	<version>1.1.0</version>
 	<licence>agpl</licence>
+	<author>Daniel Jäger</author>
 	<author>Robin Appelman</author>
 	<author>Hemant Mann</author>
+	<category>files</category>
 
 	<types>
 		<filesystem/>
 	</types>
-
-	<documentation>
-		<admin>https://docs.nextcloud.com/server/12/admin_manual/configuration_files/external_storage/dropbox.html</admin>
-	</documentation>
-
-	<category>files</category>
-
-	<website>https://github.com/icewind1991/files_external_dropbox/</website>
-	<bugs>https://github.com/icewind1991/files_external_dropbox/issues</bugs>
-	<repository type="git">https://github.com/icewind1991/files_external_dropbox.git</repository>
+	<website>https://github.com/DJaeger/files_external_dropbox/</website>
+	<bugs>https://github.com/DJaeger/files_external_dropbox/issues</bugs>
+	<repository type="git">https://github.com/DJaeger/files_external_dropbox.git</repository>
 	<screenshot>
-		https://raw.githubusercontent.com/icewind1991/files_external_dropbox/master/screenshots/screenshots-app-external-storage-dropbox.jpg
+		https://raw.githubusercontent.com/DJaeger/files_external_dropbox/master/screenshots/screenshots-app-external-storage-dropbox.jpg
 	</screenshot>
 	<screenshot>
-		https://raw.githubusercontent.com/icewind1991/files_external_dropbox/master/screenshots/settings.png
+		https://raw.githubusercontent.com/DJaeger/files_external_dropbox/master/screenshots/settings.png
 	</screenshot>
-
 	<dependencies>
-		<nextcloud min-version="14.0" max-version="15.0"/>
+		<nextcloud min-version="15.0" max-version="15.0"/>
 	</dependencies>
 </info>
