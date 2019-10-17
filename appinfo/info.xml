@@ -24,10 +24,14 @@
 	<author>Daniel Jäger</author>
 	<author>Robin Appelman</author>
 	<author>Hemant Mann</author>
-	<category>files</category>
+
+	<namespace>Files_external_dropbox</namespace>
 	<types>
 		<filesystem/>
 	</types>
+	<category>files</category>
+	<category>tools</category>
+
 	<website>https://github.com/DJaeger/files_external_dropbox/</website>
 	<bugs>https://github.com/DJaeger/files_external_dropbox/issues</bugs>
 	<repository type="git">https://github.com/DJaeger/files_external_dropbox.git</repository>
@@ -37,7 +41,13 @@
 	<screenshot>
 		https://raw.githubusercontent.com/DJaeger/files_external_dropbox/master/screenshots/settings.png
 	</screenshot>
+
 	<dependencies>
 		<nextcloud min-version="15.0" max-version="16.0"/>
 	</dependencies>
+
+	<background-jobs>
+		<job>OCA\Files_external_dropbox\BackgroundJob\MetaData</job>
+	</background-jobs>
+
 </info>
