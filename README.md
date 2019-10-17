@@ -6,7 +6,7 @@ Requires Nextcloud 15.0 to 16.0
 ## Steps For Installation:
 - Enable the files_external app with `occ app:enable files_external` if not enabled yet.
 - ~~Get the app from the [app store](https://apps.nextcloud.com/apps/files_external_dropbox)~~
-- Download the [source](https://github.com/DJaeger/files_external_dropbox/archive/v1.1.0.zip) into the Nextcloud apps directory.
+- Download the [source](https://github.com/DJaeger/files_external_dropbox/archive/v1.2.0.zip) into the Nextcloud apps directory.
 - Make sure the unzipped directory of the app is named "files_external_dropbox" and set the directory ownership according to you setup.
 - Run `make` or `composer install`
 - Enable the app in the web interface or by running `occ app:enable files_external_dropbox`
