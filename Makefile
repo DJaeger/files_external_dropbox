@@ -11,8 +11,8 @@ appstore_package_name=$(CURDIR)/build/dist/$(app_name)
 composer=$(shell which composer 2> /dev/null)
 
 occ=$(CURDIR)/../../occ
-private_key=$(HOME)/.owncloud/certificates/$(app_name).key
-certificate=$(HOME)/.owncloud/certificates/$(app_name).crt
+private_key=$(HOME)/.nextcloud/certificates/$(app_name).key
+certificate=$(HOME)/.nextcloud/certificates/$(app_name).crt
 sign=php -f $(occ) integrity:sign-app --privateKey="$(private_key)" --certificate="$(certificate)"
 sign_skip_msg="Skipping signing, either no key and certificate found in $(private_key) and $(certificate) or occ can not be found at $(occ)"
 ifneq (,$(wildcard $(private_key)))
@@ -79,6 +79,7 @@ $(dist_dir)/files_external_dropbox: $(composer_deps)
 	rm -Rf $@; mkdir -p $@
 	cp -R $(market_all_src) $@
 	find $@/vendor -type d -iname Test? -print | xargs rm -Rf
+	find $@/vendor -type d -iname \.git -print | xargs rm -Rf
 	find $@/vendor -name travis -print | xargs rm -Rf
 	find $@/vendor -name doc -print | xargs rm -Rf
 	find $@/vendor -iname \*.sh -delete
