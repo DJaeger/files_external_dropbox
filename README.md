@@ -1,7 +1,7 @@
 # files_external_dropbox
 Flysystem based dropbox backend for Nextcloud
 
-Requires Nextcloud 15.0 to 16.0
+Requires Nextcloud 15.0 to 17.0
 
 ## Steps For Installation:
 - Enable the files_external app with `occ app:enable files_external` if not enabled yet.

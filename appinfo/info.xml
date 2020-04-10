@@ -53,7 +53,7 @@ Connecting Dropbox with OAuth2 is a little more work because you have to create 
 	</screenshot>
 
 	<dependencies>
-		<nextcloud min-version="15.0" max-version="16.0"/>
+		<nextcloud min-version="15.0" max-version="17.0"/>
 	</dependencies>
 
 	<background-jobs>
