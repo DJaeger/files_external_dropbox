@@ -19,7 +19,13 @@
  *
  */
 
-require_once dirname(__DIR__) . '/vendor/autoload.php';
+if ((@include_once(dirname(__DIR__).'/vendor/autoload.php')) === false) {
+    throw new \Exception('Cannot include autoload. Did you install dependencies using composer?');
+}
+
+if (\OC::$server->getAppManager()->isEnabledForUser('files_external') === false) {
+    \OC::$server->getAppManager()->enableApp('files_external');
+}
 
 $app = new \OCA\Files_external_dropbox\AppInfo\Application();
 $app->register();
