@@ -29,7 +29,6 @@ Requires Nextcloud 15.0 to 17.0
 - After completing the OAuth you will be redirect back to Storage Section and you should see **green** mark along your storage configuration
 ### Global configuration
 - To allow any user to configure his own dropbox storage, you need to ensure that relevant checkbox is setting under "Allow users to mount external storage"
-- That's it
 
 ## Dependencies
 This app depends on the flysystem adapter for dropbox which can be found here [https://github.com/Hemant-Mann/flysystem-dropbox](https://github.com/Hemant-Mann/flysystem-dropbox)
