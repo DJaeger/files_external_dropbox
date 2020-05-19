@@ -42,7 +42,7 @@ class Dropbox extends Backend {
 
 			])
 			->addAuthScheme(AuthMechanism::SCHEME_OAUTH2)
-			->addCustomJs('../../files_external_dropbox/js/dropbox');
+			->addCustomJs('dropbox');
 	}
 
 }
