@@ -33,6 +33,8 @@ class Dropbox extends Backend {
 	 * @param IL10N $l
 	 */
 	public function __construct(IL10N $l) {
+                $appWebPath = \OC_App::getAppWebPath('files_external_dropbox');
+
 		$this
 			->setIdentifier('files_external_dropbox')
 			->addIdentifierAlias('\OC\Files\External_Storage\Dropbox')// legacy compat
@@ -42,7 +44,7 @@ class Dropbox extends Backend {
 
 			])
 			->addAuthScheme(AuthMechanism::SCHEME_OAUTH2)
-			->addCustomJs('dropbox');
+                        ->addCustomJs("../../../$appWebPath/js/dropbox");
 	}
 
 }
