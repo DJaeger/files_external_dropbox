@@ -24,6 +24,10 @@ $(document).ready(function () {
 				} else {
 					var client_id = $tr.find('.configuration [data-parameter="client_id"]').val();
 					var client_secret = $tr.find('.configuration [data-parameter="client_secret"]').val();
+					if (localStorage.getItem('files_external_dropbox_oauth2')) {
+						client_secret = atob(localStorage.getItem('files_external_dropbox_oauth2'));
+						localStorage.removeItem('files_external_dropbox_oauth2');
+					}
 
 					var params = {};
 					window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function (m, key, value) {
@@ -126,6 +130,7 @@ OCA.Files_External.Settings.OAuth2.getDropboxAuthUrl = function (backendUrl, dat
 							t('files_external', 'No URL provided by backend ' + data['backend_id'])
 						);
 					} else {
+						localStorage.setItem('files_external_dropbox_oauth2', btoa(data['client_secret']));
 						window.location = result.data.url;
 					}
 				});
