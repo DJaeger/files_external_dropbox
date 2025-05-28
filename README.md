@@ -1,7 +1,7 @@
 # files_external_dropbox
 Flysystem based dropbox backend for Nextcloud
 
-Requires Nextcloud 15.0 to 20.0.2
+Requires Nextcloud 15.0 to 22.0
 
 ## Steps For Installation
 ### From App Store
@@ -18,11 +18,11 @@ Requires Nextcloud 15.0 to 20.0.2
 - Then choose which folders to share, or to share everything in your Dropbox.
 - Name Your App and then click Create App
 - Under the section **OAuth2** Redirect URIs add a new URL
-  For adding global storages:
-  ```https://mynextcloud.example.com/settings/admin/externalstorages```
-  and for user storages:
-  ```https://mynextcloud.example.com/settings/admin/externalstorages```
-   _(Replace `https://mynextcloud.example.com/ with your valid Nextcloud installation path)_
+  - For adding global storages:
+    ```https://mynextcloud.example.com/index.php/settings/user/externalstorages```
+  - For user storages:
+    ```https://mynextcloud.example.com/index.php/settings/admin/externalstorages```<br>
+    _(Replace `https://mynextcloud.example.com/ with your valid Nextcloud installation path)_
 - Then go to nextcloud ```settings/admin/externalstorages``` and add a new storage **Dropbox V2**
 - Fill the details Client Id, Client Secrets from your Dropbox App page (search for "App key" and "App secret")
 - Click Grant Access and then you will be redirected to the OAuth login
