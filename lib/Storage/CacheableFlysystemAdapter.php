@@ -172,11 +172,15 @@ abstract class CacheableFlysystemAdapter extends Flysystem {
 		if ($path === '' or $path === '/' or $path === '.') {
 			return 'dir';
 		}
-                try {
-                        $info = $this->getFlysystemMetadata($path);
-                } catch (FileNotFoundException $e) {
-                        return false;
-                }
-		return $info['type'];
+		try {
+			$info = $this->getFlysystemMetadata($path);
+		} catch (FileNotFoundException $e) {
+			return false;
+		}
+		if ( !empty($info['type']) ) {
+			return $info['type'];
+		} else {
+			return false;
+		}
 	}
 }
