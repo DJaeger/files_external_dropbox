@@ -6,9 +6,8 @@
         }
     ],
     "require": {
-        "kunalvarma05/dropbox-php-sdk": "v0.2.2",
-        "hemant-mann/flysystem-dropbox": "v1.0.4",
-        "tightenco/collect": "v5.4.33"
+        "kunalvarma05/dropbox-php-sdk": "v0.4.2",
+        "hemant-mann/flysystem-dropbox": "v1.0.5"
     },
     "minimum-stability": "dev"
 }
