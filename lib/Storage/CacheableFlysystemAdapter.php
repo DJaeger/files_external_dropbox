@@ -23,7 +23,6 @@ namespace OCA\Files_external_dropbox\Storage;
 
 use Icewind\Streams\IteratorDirectory;
 use League\Flysystem\FileNotFoundException;
-use OC\Files\Storage\Flysystem;
 
 /**
  * Generic Cacheable adapter between flysystem adapters and owncloud's storage system
