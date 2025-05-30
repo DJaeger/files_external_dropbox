@@ -18,12 +18,14 @@ Requires Nextcloud 22.0 to 25.0
 - Then choose which folders to share, or to share everything in your Dropbox.
 - Name Your App and then click Create App
 - Under the section **OAuth2** Redirect URIs add a new URL
-  - For adding global storages:
+  - For adding global storages:<br>
+    ```https://mynextcloud.example.com/index.php/settings/admin/externalstorages```
+  - For user storages:<br>
     ```https://mynextcloud.example.com/index.php/settings/user/externalstorages```
-  - For user storages:
-    ```https://mynextcloud.example.com/index.php/settings/admin/externalstorages```<br>
-    _(Replace `https://mynextcloud.example.com/ with your valid Nextcloud installation path)_
-- Then go to nextcloud ```settings/admin/externalstorages``` and add a new storage **Dropbox V2**
+
+  _Replace `https://mynextcloud.example.com/` with your valid Nextcloud installation path_<br>
+  _If you have set `htaccess.RewriteBase` in your config.php you may need to remove index.php and may need to add a subdirectory_
+- Then go to nextcloud ```/settings/admin/externalstorages``` and add a new storage **Dropbox V2**
 - Fill the details Client Id, Client Secrets from your Dropbox App page (search for "App key" and "App secret")
 - Click Grant Access and then you will be redirected to the OAuth login
 - After completing the OAuth you will be redirect back to Storage Section and you should see **green** mark along your storage configuration
@@ -31,4 +33,5 @@ Requires Nextcloud 22.0 to 25.0
 - To allow any user to configure his own dropbox storage, you need to ensure that relevant checkbox is setting under "Allow users to mount external storage"
 
 ## Dependencies
-This app depends on the flysystem adapter for dropbox which can be found here [https://github.com/Hemant-Mann/flysystem-dropbox](https://github.com/Hemant-Mann/flysystem-dropbox)
+This app depends on the flysystem adapter for dropbox which can be found here:<br>
+[https://github.com/Hemant-Mann/flysystem-dropbox](https://github.com/Hemant-Mann/flysystem-dropbox)
