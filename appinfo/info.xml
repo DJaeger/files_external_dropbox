@@ -31,7 +31,7 @@ Connecting Dropbox with OAuth2 is a little more work because you have to create 
 - After completing the OAuth you will be redirect back to Storage Section and you should see **green** mark along your storage configuration
 - That's it
 	]]></description>
-	<version>1.5.0</version>
+	<version>1.5.1</version>
 	<licence>agpl</licence>
 	<author>Daniel Jäger</author>
 	<author>Robin Appelman</author>
