@@ -23,9 +23,15 @@ Requires Nextcloud 22.0 to 25.0
   - For user storages:<br>
     ```https://mynextcloud.example.com/index.php/settings/user/externalstorages```
 
-  _Replace `https://mynextcloud.example.com/` with your valid Nextcloud installation path_<br>
-  _If you have set `htaccess.RewriteBase` in your config.php you may need to remove index.php and may need to add a subdirectory_
+  _Replace `https://mynextcloud.example.com/` with your valid Nextcloud installation path._<br>
+  _If you have set `htaccess.RewriteBase` in your `config.php` you may need to remove `/index.php` and may need to add a subdirectory_
 - Then go to nextcloud ```/settings/admin/externalstorages``` and add a new storage **Dropbox V2**
+  > :warning: **Warning:** There is a bug introduced in Nextcloud v24.0.0 but only fixed in v27.0.0 and up.
+  > 
+  > This bug prevents any interactive authorisation for external storages like its required for OAuth2,<br>
+  > but any existing authorization remains in place as long as it is not revoked.<br>
+  > If you know what you are doing, you may fix it yourself, like it has been done in core version 27.0.0:<br>
+  > https://github.com/nextcloud/server/commit/da83464459d4fc2fd4965b805354933f8e6fbdf6
 - Fill the details Client Id, Client Secrets from your Dropbox App page (search for "App key" and "App secret")
 - Click Grant Access and then you will be redirected to the OAuth login
 - After completing the OAuth you will be redirect back to Storage Section and you should see **green** mark along your storage configuration
