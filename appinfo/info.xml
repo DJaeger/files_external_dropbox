@@ -32,6 +32,7 @@ Connecting Dropbox with OAuth2 is a little more work because you have to create 
   > but any existing authorization remains in place as long as it is not revoked.<br>
   > If you know what you are doing, you may fix it yourself, like it has been done in core version 27.0.0:<br>
   > https://github.com/nextcloud/server/commit/da83464459d4fc2fd4965b805354933f8e6fbdf6
+  > You need to reapply this patch after any update of the files_external app and the Nextcloud core until core version 27.0.0.
 - Fill the details Client Id, Client Secrets from your Dropbox App page (search for "App key" and "App secret")
 - Click Grant Access and then you will be redirected to the OAuth login
 - After completing the OAuth you will be redirect back to Storage Section and you should see **green** mark along your storage configuration
