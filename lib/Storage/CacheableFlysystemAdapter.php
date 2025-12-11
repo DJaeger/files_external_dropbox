@@ -137,7 +137,7 @@ abstract class CacheableFlysystemAdapter extends Flysystem {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function filesize($path) {
+	public function filesize($path): false|int|float {
 		if ($this->is_dir($path)) {
 			return 0;
 		} else {

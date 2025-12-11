@@ -126,7 +126,7 @@ abstract class Flysystem extends Common {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function filesize($path) {
+	public function filesize($path): false|int|float {
 		if ($this->is_dir($path)) {
 			return 0;
 		} else {
