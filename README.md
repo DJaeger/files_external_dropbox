@@ -1,7 +1,7 @@
 # files_external_dropbox
 Flysystem based Dropbox backend for Nextcloud
 
-Requires Nextcloud 22.0 to 25.0
+Requires Nextcloud 26.0 to 30.0
 
 ## Steps For Installation
 ### From App Store
