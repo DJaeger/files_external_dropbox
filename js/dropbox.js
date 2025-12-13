@@ -10,12 +10,23 @@ $(document).ready(function () {
 		if (authMechanism === 'oauth2::oauth2' &&
 			$tr.hasClass('files_external_dropbox')) {
 			var config = $tr.find('.configuration');
-			// hack to prevent conflict with oauth2 code from files_external
-			// wait for files_external to setup the config ui and then change the button
+
+			// wait for files_external to setup the config ui
 			setTimeout(function () {
+				// change the grant button to prevent conflict with oauth2 code from files_external
 				config.find('[name="oauth2_grant"]')
 					.attr('name', 'oauth2_grant_dropbox');
 			}, 50);
+
+			// wait for files_external to test the mounts
+			setTimeout(function () {
+				// if mount has an error
+				// enable the grant button to renew the token
+				if ( $tr.find('.status .error').length ) {
+					config.find('[name="oauth2_grant_dropbox"]')
+						.prop('disabled', false);
+				}
+			}, 1000);
 
 			onCompletion.then(function () {
 				var configured = $tr.find('[data-parameter="configured"]');
