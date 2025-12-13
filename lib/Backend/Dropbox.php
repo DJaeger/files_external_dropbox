@@ -1,6 +1,7 @@
 <?php
 /**
  * @author Hemant Mann <hemant.mann121@gmail.com>
+ * @author Daniel Jäger <daniel-jaeger@online.de>
  *
  * @copyright Copyright (c) 2017, ownCloud GmbH.
  * @license AGPL-3.0
@@ -22,20 +23,19 @@
 namespace OCA\Files_external_dropbox\Backend;
 
 use OCA\Files_External\Lib\Auth\AuthMechanism;
-use OCA\Files_External\Lib\Backend\Backend;
 use OCP\IL10N;
 
-class Dropbox extends Backend {
+class Dropbox extends \OCA\Files_External\Lib\Backend\Backend {
 
 	/**
-	 * Dropbox constructor.
+	 * Backend constructor.
 	 *
 	 * @param IL10N $l
 	 */
-	public function __construct(IL10N $l) {
-                $appWebPath = \OC_App::getAppWebPath('files_external_dropbox');
+    public function __construct(IL10N $l) {
+        $appWebPath = \OC_App::getAppWebPath('files_external_dropbox');
 
-		$this
+        $this
 			->setIdentifier('files_external_dropbox')
 			->addIdentifierAlias('\OC\Files\External_Storage\Dropbox')// legacy compat
 			->setStorageClass('\OCA\Files_external_dropbox\Storage\Dropbox')
