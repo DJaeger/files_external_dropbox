@@ -22,14 +22,15 @@
 namespace OCA\Files_external_dropbox\BackgroundJob;
 
 
+use OC\Files\Utils\Scanner;
 use OCA\Files_External\Lib\StorageConfig;
+use OCP\AppFramework\Utility\ITimeFactory;
+use OCP\BackgroundJob\TimedJob;
 use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\ILogger;
 use OCP\IUser;
 use OCP\IUserManager;
-use OC\Files\Utils\Scanner;
-use OC\BackgroundJob\TimedJob;
 
 class MetaData extends TimedJob {
 	/** @var IConfig */
@@ -46,12 +47,14 @@ class MetaData extends TimedJob {
 	private $appName = 'files_external_dropbox';
 
 	/**
+	 * @param ITimeFactory|null $time
 	 * @param IConfig|null $config
 	 * @param IUserManager|null $userManager
 	 * @param IDBConnection|null $dbConnection
 	 * @param ILogger|null $logger
 	 */
-	public function __construct(IConfig $config = null,
+	public function __construct(ITimeFactory $time,
+								IConfig $config = null,
 								IUserManager $userManager = null,
 								IDBConnection $dbConnection = null,
 								ILogger $logger = null) {
