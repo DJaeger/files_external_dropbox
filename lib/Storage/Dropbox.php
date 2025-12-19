@@ -96,6 +96,10 @@ class Dropbox extends CacheableFlysystemAdapter {
      * @throws \Exception
      */
     public function __construct($params) {
+        // Do nothing until configured else other requests may fail
+        if (isset($params['configured']) && $params['configured'] === 'false') {
+            return false;
+        }
         if (isset($params['client_id']) && isset($params['client_secret']) && isset($params['token'])
             && isset($params['configured']) && $params['configured'] === 'true'
         ) {
@@ -110,7 +114,13 @@ class Dropbox extends CacheableFlysystemAdapter {
             $this->adapter = new Adapter($dropboxClient);
             $this->buildFlySystem($this->adapter);
         } else {
-            throw new \Exception('Creating \OCA\Files_external_dropbox\Storage\Dropbox storage failed');
+            $message = "";
+            if (!isset($params['client_id'])) $message .= "client_id parameter not provided - ";
+            if (!isset($params['client_secret'])) $message .= "client_secret parameter not provided - ";
+            if (!isset($params['token'])) $message .= "token parameter not provided - ";
+            if (!isset($params['configured'])) $message .= "configured parameter not provided - ";
+            if (isset($params['configured'])&&$params['configured']!=='true') $message .= "configured parameter provided, but not true";
+            throw new \Exception('Creating \OCA\Files_external_dropbox\Storage\Dropbox storage failed: '.$message);
         }
         $this->logger = logger(self::APP_NAME);
     }
@@ -213,14 +223,16 @@ class Dropbox extends CacheableFlysystemAdapter {
      */
     public function test() {
         try {
-            $obj = $this->adapter->getClient()->getCurrentAccount();
-            if ($obj && $obj->getAccountId()) {
-                return true;
+            if ($this->adapter && $this->adapter->getClient()) {
+                $dropbox = $this->adapter->getClient();
+                $obj = $dropbox->getCurrentAccount();
+                if ($obj && $obj->getAccountId()) {
+                    return true;
+                }
             }
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage(), ['exception' => $e]);
         }
-        
         return false;
     }
 }

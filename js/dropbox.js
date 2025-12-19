@@ -7,8 +7,8 @@ $(document).ready(function () {
 	}
 
 	OCA.Files_External.Settings.mountConfig.whenSelectAuthMechanism(function ($tr, authMechanism, scheme, onCompletion) {
-		if (authMechanism === 'oauth2::oauth2' &&
-			$tr.hasClass('files_external_dropbox')) {
+		if (authMechanism === 'oauth2::oauth2' && $tr.hasClass('files_external_dropbox')) {
+
 			var config = $tr.find('.configuration');
 
 			// wait for files_external to setup the config ui
@@ -16,7 +16,13 @@ $(document).ready(function () {
 				// change the grant button to prevent conflict with oauth2 code from files_external
 				config.find('[name="oauth2_grant"]')
 					.attr('name', 'oauth2_grant_dropbox');
-			}, 50);
+				// Default to false if empty string for configured and token parameters
+				// Without Nextcloud would fail to save the mount before authorizing
+				var configured = config.find('[data-parameter="configured"]');
+				if ( configured.val() == '' ) configured.val('false');
+				var token = config.find('[data-parameter="token"]');
+				if ( token.val() == '' ) token.val('false');
+			}, 200);
 
 			// wait for files_external to test the mounts
 			setTimeout(function () {
@@ -98,6 +104,12 @@ $(document).ready(function () {
 		}
 
 		OCA.Files_External.Settings.OAuth2.dropboxVerifyCode(backendUrl, data)
+			.always(function(){
+				// Cleanup localStorage
+				localStorage.removeItem('files_external_dropbox_oauth2');
+				// Redirect to remove code from URL
+				window.location = location.protocol + '//' + location.host + location.pathname;
+			})
 			.fail(function (message) {
 				OC.dialogs.alert(message,
 					t(backendId, 'Error verifying OAuth2 Code for ' + backendId)
