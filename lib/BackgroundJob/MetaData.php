@@ -1,6 +1,7 @@
 <?php
 /**
  * @author Hemant Mann <hemant.mann121@gmail.com>
+ * @author Daniel Jäger <daniel-jaeger@online.de>
  *
  * @copyright Copyright (c) 2017, ownCloud GmbH.
  * @license AGPL-3.0
@@ -28,36 +29,43 @@ use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\BackgroundJob\TimedJob;
 use OCP\IConfig;
 use OCP\IDBConnection;
-use OCP\ILogger;
 use OCP\IUser;
 use OCP\IUserManager;
+use Psr\Log\LoggerInterface;
+use function OCP\Log\logger;
 
 class MetaData extends TimedJob {
+	const APP_NAME = 'files_external_dropbox';
+
+	/**
+	 * This is used by LoggerInterface for app context
+	 * @var string
+	 */
+	protected $appId = self::APP_NAME;
+
 	/** @var IConfig */
 	private $config;
 	/** @var IUserManager */
 	private $userManager;
 	/** @var IDBConnection */
 	private $dbConnection;
-	/** @var ILogger */
+	/** @var LoggerInterface */
 	private $logger;
 	/** Amount of users that should get scanned per execution */
 	const USERS_PER_SESSION = 500;
-
-	private $appName = 'files_external_dropbox';
 
 	/**
 	 * @param ITimeFactory|null $time
 	 * @param IConfig|null $config
 	 * @param IUserManager|null $userManager
 	 * @param IDBConnection|null $dbConnection
-	 * @param ILogger|null $logger
+	 * @param LoggerInterface|null $logger
 	 */
 	public function __construct(ITimeFactory $time,
 								IConfig $config = null,
 								IUserManager $userManager = null,
 								IDBConnection $dbConnection = null,
-								ILogger $logger = null) {
+								LoggerInterface $logger = null) {
 		// Run once per 10 minutes
 		$this->setInterval(1);
 		if (is_null($userManager) || is_null($config)) {
@@ -72,7 +80,7 @@ class MetaData extends TimedJob {
 	protected function fixDIForJobs() {
 		$this->config = \OC::$server->getConfig();
 		$this->userManager = \OC::$server->getUserManager();
-		$this->logger = \OC::$server->getLogger();
+		$this->logger = logger(self::APP_NAME);
 	}
 
 	/**
@@ -93,7 +101,7 @@ class MetaData extends TimedJob {
 			$storage = new \OCA\Files_external_dropbox\Storage\Dropbox($opts);
 			$key = 'dropbox_cursor_storage_' . $storageConfig->getId();
 
-			$cursor = $this->config->getAppValue($this->appName, $key, null);
+			$cursor = $this->config->getAppValue($this->appId, $key, null);
 			if ($cursor && $isUpdated = $storage->isStorageUpdated($cursor)) {
 				$directories = $storage->getModifiedPaths($cursor);
 				foreach ($directories as $directory) {
@@ -104,9 +112,9 @@ class MetaData extends TimedJob {
 				$cursor = $storage->getLatestCursor();
 				$storage->getScanner()->scan('/', true);
 			}
-			$this->config->setAppValue($this->appName, $key, $cursor);
+			$this->config->setAppValue($this->appId, $key, $cursor);
 		} catch (\Exception $e) {
-			$this->logger->logException($e, ['message' => 'Storage Syncing failed for ' . $storageConfig->getId()]);
+			$this->logger->error('Storage Syncing failed for ' . $storageConfig->getId(), ['exception' => $e]);
 			return false;
 		}
 		return true;
@@ -118,7 +126,7 @@ class MetaData extends TimedJob {
 		$result = [];
 		foreach ($resp as $r) {
 			$data = $r->getBackend()->jsonSerialize();
-			if ($data['identifier'] === $this->appName) {
+			if ($data['identifier'] === $this->appId) {
 				$result[] = $r;
 			}
 		}

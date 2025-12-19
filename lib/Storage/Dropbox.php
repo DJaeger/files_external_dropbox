@@ -1,6 +1,7 @@
 <?php
 /**
  * @author Hemant Mann <hemant.mann121@gmail.com>
+ * @author Daniel Jäger <daniel-jaeger@online.de>
  *
  * @copyright Copyright (c) 2017, ownCloud GmbH.
  * @license AGPL-3.0
@@ -24,10 +25,18 @@ namespace OCA\Files_external_dropbox\Storage;
 use Kunnu\Dropbox\DropboxApp;
 use Kunnu\Dropbox\Dropbox as DropboxClient;
 use OCP\Files\Storage\FlysystemStorageAdapter;
+use Psr\Log\LoggerInterface;
+use function OCP\Log\logger;
 
 
 class Dropbox extends CacheableFlysystemAdapter {
     const APP_NAME = 'files_external_dropbox';
+
+    /**
+     * This is used by LoggerInterface for app context
+     * @var string
+     */
+    protected $appId = self::APP_NAME;
 
     /**
      * @var string
@@ -62,7 +71,7 @@ class Dropbox extends CacheableFlysystemAdapter {
 
     /**
      * Logger variable
-     * @var \OCP\ILogger
+     * @var LoggerInterface
      */
     protected $logger;
 
@@ -103,7 +112,7 @@ class Dropbox extends CacheableFlysystemAdapter {
         } else {
             throw new \Exception('Creating \OCA\Files_external_dropbox\Storage\Dropbox storage failed');
         }
-        $this->logger = \OC::$server->getLogger();
+        $this->logger = logger(self::APP_NAME);
     }
 
     /**
@@ -170,7 +179,7 @@ class Dropbox extends CacheableFlysystemAdapter {
                 return $body['cursor'];
             }
         } catch (\Exception $e) {
-            $this->logger->logException($e, ['app' => self::APP_NAME]);
+            $this->logger->error($e->getMessage(), ['exception' => $e]);
         }
         return null;
     }
@@ -186,7 +195,7 @@ class Dropbox extends CacheableFlysystemAdapter {
                 return $body['changes'];
             }
         } catch (\Exception $e) {
-            $this->logger->logException($e, ['app' => self::APP_NAME]);
+            $this->logger->error($e->getMessage(), ['exception' => $e]);
         }
         return true;
     }
@@ -209,7 +218,7 @@ class Dropbox extends CacheableFlysystemAdapter {
                 return true;
             }
         } catch (\Exception $e) {
-            $this->logger->logException($e, ['app' => self::APP_NAME]);
+            $this->logger->error($e->getMessage(), ['exception' => $e]);
         }
         
         return false;
