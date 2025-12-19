@@ -28,9 +28,6 @@ use OCA\Files_External\Lib\StorageConfig;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\BackgroundJob\TimedJob;
 use OCP\IConfig;
-use OCP\IDBConnection;
-use OCP\IUser;
-use OCP\IUserManager;
 use Psr\Log\LoggerInterface;
 use function OCP\Log\logger;
 
@@ -43,43 +40,41 @@ class MetaData extends TimedJob {
 	 */
 	protected $appId = self::APP_NAME;
 
-	/** @var IConfig */
+	/**
+	 * @var IConfig
+	 */
 	private $config;
-	/** @var IUserManager */
-	private $userManager;
-	/** @var IDBConnection */
-	private $dbConnection;
-	/** @var LoggerInterface */
+
+	/**
+	 * @var LoggerInterface
+	 */
 	private $logger;
-	/** Amount of users that should get scanned per execution */
-	const USERS_PER_SESSION = 500;
 
 	/**
 	 * @param ITimeFactory|null $time
 	 * @param IConfig|null $config
-	 * @param IUserManager|null $userManager
-	 * @param IDBConnection|null $dbConnection
 	 * @param LoggerInterface|null $logger
 	 */
 	public function __construct(ITimeFactory $time,
 								IConfig $config = null,
-								IUserManager $userManager = null,
-								IDBConnection $dbConnection = null,
 								LoggerInterface $logger = null) {
+
+		parent::__construct($time);
+
 		// Run once per 10 minutes
-		$this->setInterval(1);
-		if (is_null($userManager) || is_null($config)) {
+		$this->setInterval(60 * 10);
+
+		// Get static logger and config if they are not in params
+		if (is_null($logger) || is_null($config)) {
 			$this->fixDIForJobs();
 		} else {
 			$this->config = $config;
-			$this->userManager = $userManager;
 			$this->logger = $logger;
 		}
 	}
 
 	protected function fixDIForJobs() {
 		$this->config = \OC::$server->getConfig();
-		$this->userManager = \OC::$server->getUserManager();
 		$this->logger = logger(self::APP_NAME);
 	}
 
@@ -120,19 +115,17 @@ class MetaData extends TimedJob {
 		return true;
 	}
 
-	public function run($argument) {
+	// The function, that is "run" by the background job handler
+	protected function run($arguments) {
 		$service = \OC::$server->getGlobalStoragesService();
-		$resp = $service->getAllStorages();
-		$result = [];
-		foreach ($resp as $r) {
-			$data = $r->getBackend()->jsonSerialize();
-			if ($data['identifier'] === $this->appId) {
-				$result[] = $r;
+		$Storages = $service->getAllStorages();
+		foreach ($Storages as $storageConfig) {
+			$data = $storageConfig->getBackend()->jsonSerialize();
+			if ($data['identifier'] === self::APP_NAME) {
+				$this->syncStorage($storageConfig);
 			}
-		}
-		foreach ($result as $r) {
-			$this->syncStorage($r);
 		}
 		return true;
 	}
+
 }
