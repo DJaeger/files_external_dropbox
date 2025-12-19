@@ -19,10 +19,8 @@
  *
  */
 
-$app = new \OCA\Files_external_dropbox\AppInfo\Application();
+namespace OCA\Files_external_dropbox;
 
-$app->registerRoutes($this, [
-	'routes' => [
-		['name' => 'oauth#receiveToken', 'url' => '/oauth', 'verb' => 'POST'],
-	],
-]);
+return ['routes' => [
+	['name' => 'oauth#receiveToken', 'url' => '/oauth', 'verb' => 'POST'],
+]];
