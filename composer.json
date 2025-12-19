@@ -1,13 +1,7 @@
 {
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/Hemant-Mann/flysystem-dropbox"
-        }
-    ],
     "require": {
+        "php": "^8.0",
         "kunalvarma05/dropbox-php-sdk": "v0.4.2",
         "hemant-mann/flysystem-dropbox": "v1.0.5"
-    },
-    "minimum-stability": "dev"
+    }
 }
