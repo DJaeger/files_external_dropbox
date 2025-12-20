@@ -22,6 +22,10 @@ $(document).ready(function () {
 				if ( configured.val() == '' ) configured.val('false');
 				var token = config.find('[data-parameter="token"]');
 				if ( token.val() == '' ) token.val('false');
+				var refreshToken = config.find('[data-parameter="refresh_token"]');
+				if ( refreshToken.val() == '' ) refreshToken.val('false');
+				var expiryTime = config.find('[data-parameter="expiry_time"]');
+				if ( expiryTime.val() == '' ) expiryTime.val('false');
 			}, 200);
 
 			// wait for files_external to test the mounts
@@ -136,6 +140,8 @@ OCA.Files_External.Settings.OAuth2.getDropboxAuthUrl = function (backendUrl, dat
 	var $tr = data['tr'];
 	var configured = $tr.find('[data-parameter="configured"]');
 	var token = $tr.find('.configuration [data-parameter="token"]');
+	var refreshToken = $tr.find('.configuration [data-parameter="refresh_token"]');
+	var expiryTime = $tr.find('.configuration [data-parameter="expiry_time"]');
 
 	$.post(backendUrl, {
 			step: 1,
@@ -146,6 +152,8 @@ OCA.Files_External.Settings.OAuth2.getDropboxAuthUrl = function (backendUrl, dat
 			if (result && result.status == 'success') {
 				$(configured).val('false');
 				$(token).val('false');
+				$(refreshToken).val('false');
+				$(expiryTime).val('false');
 
 				OCA.Files_External.Settings.mountConfig.saveStorageConfig($tr, function (status) {
 					if (!result.data.url) {
@@ -179,6 +187,8 @@ OCA.Files_External.Settings.OAuth2.dropboxVerifyCode = function (backendUrl, dat
 	var $tr = data['tr'];
 	var configured = $tr.find('[data-parameter="configured"]');
 	var token = $tr.find('.configuration [data-parameter="token"]');
+	var refreshToken = $tr.find('.configuration [data-parameter="refresh_token"]');
+	var expiryTime = $tr.find('.configuration [data-parameter="expiry_time"]');
 	var statusSpan = $tr.find('.status span');
 	statusSpan.removeClass().addClass('waiting');
 
@@ -193,6 +203,8 @@ OCA.Files_External.Settings.OAuth2.dropboxVerifyCode = function (backendUrl, dat
 		}, function (result) {
 			if (result && result.status == 'success') {
 				$(token).val(result.data.token);
+				$(refreshToken).val(result.data.refresh_token);
+				$(expiryTime).val(Math.floor( Date.now() / 1000 ) + result.data.expiry_time);
 				$(configured).val('true');
 
 				OCA.Files_External.Settings.mountConfig.saveStorageConfig($tr, function (status) {

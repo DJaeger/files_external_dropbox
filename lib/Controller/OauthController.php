@@ -82,7 +82,7 @@ class OauthController extends Controller {
 
 			if ($step === 1) {
 				$params = ["scope"=>"account_info.read files.content.read files.content.write files.metadata.read files.metadata.write"];
-				$authUrl = $authHelper->getAuthUrl($redirect, $params);
+				$authUrl = $authHelper->getAuthUrl($redirect, $params, null, 'offline');
 				return new DataResponse([
 					'status' => 'success',
 					'data' => ['url' => $authUrl]
@@ -92,7 +92,11 @@ class OauthController extends Controller {
 					$accessToken = $authHelper->getAccessToken($code, null, $redirect);
 					return new DataResponse([
 						'status' => 'success',
-						'data' => ['token' => $accessToken->getToken()]
+						'data' => [
+							'token' => $accessToken->getToken(),
+							'refresh_token' => $accessToken->getRefreshToken(),
+							'expiry_time' => $accessToken->getExpiryTime()
+						]
 					]);
 				} catch (\Exception $ex) {
 					return new DataResponse([

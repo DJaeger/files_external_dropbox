@@ -24,7 +24,6 @@ namespace OCA\Files_external_dropbox\Storage;
 
 use Kunnu\Dropbox\DropboxApp;
 use Kunnu\Dropbox\Dropbox as DropboxClient;
-use OCP\Files\Storage\FlysystemStorageAdapter;
 use Psr\Log\LoggerInterface;
 use function OCP\Log\logger;
 
@@ -87,6 +86,9 @@ class Dropbox extends CacheableFlysystemAdapter {
         $this->flysystem->addPlugin(new \League\Flysystem\Plugin\GetWithMetadata());
     }
 
+    /**
+     * @param Adapter
+     */
     public function setAdapter($adapter) {
         $this->adapter = $adapter;
     }
@@ -100,29 +102,42 @@ class Dropbox extends CacheableFlysystemAdapter {
         if (isset($params['configured']) && $params['configured'] === 'false') {
             return false;
         }
-        if (isset($params['client_id']) && isset($params['client_secret']) && isset($params['token'])
+        if (isset($params['client_id']) && isset($params['client_secret'])
+            && isset($params['token']) && isset($params['refresh_token'])
+            && isset($params['expiry_time']) && $params['expiry_time'] != 'NaN'
             && isset($params['configured']) && $params['configured'] === 'true'
         ) {
             $this->clientId = $params['client_id'];
             $this->clientSecret = $params['client_secret'];
             $this->accessToken = $params['token'];
+            $this->refreshToken = $params['refresh_token'];
+            $this->expiryTime = $params['expiry_time'];
             $this->root = isset($params['root']) ? $params['root'] : '/';
+            $this->logger = logger(self::APP_NAME);
 
+            if ( $this->expiryTime <= time() ) {
+                $this->updateToken();
+            }
+
+            // Create a Dropbox client
             $app = new DropboxApp($this->clientId, $this->clientSecret, $this->accessToken);
             $dropboxClient = new DropboxClient($app);
 
+            // Create the flysystem
             $this->adapter = new Adapter($dropboxClient);
             $this->buildFlySystem($this->adapter);
+
         } else {
             $message = "";
             if (!isset($params['client_id'])) $message .= "client_id parameter not provided - ";
             if (!isset($params['client_secret'])) $message .= "client_secret parameter not provided - ";
             if (!isset($params['token'])) $message .= "token parameter not provided - ";
+            if (!isset($params['refreshToken'])) $message .= "refreshToken parameter not provided - ";
+            if (!isset($params['expiryTime'])) $message .= "expiryTime parameter not provided - ";
             if (!isset($params['configured'])) $message .= "configured parameter not provided - ";
             if (isset($params['configured'])&&$params['configured']!=='true') $message .= "configured parameter provided, but not true";
             throw new \Exception('Creating \OCA\Files_external_dropbox\Storage\Dropbox storage failed: '.$message);
         }
-        $this->logger = logger(self::APP_NAME);
     }
 
     /**
@@ -234,5 +249,54 @@ class Dropbox extends CacheableFlysystemAdapter {
             $this->logger->error($e->getMessage(), ['exception' => $e]);
         }
         return false;
+    }
+
+    public function updateToken(): void {
+        $this->logger->info("Request new Dropbox access token with refresh token");
+
+        try {
+
+            // Create a new client
+            $dropboxApp = new DropboxApp($this->clientId, $this->clientSecret, $this->accessToken);
+            $dropboxClient = new DropboxClient($dropboxApp);
+
+            // Get a new access token with refresh token
+            $authHelper = $dropboxClient->getAuthHelper();
+            $accessToken = $authHelper->getOAuth2Client()->getAccessToken($this->refreshToken, null, 'refresh_token');
+
+            // Save the new access token and expiry time to storage config
+            $this->accessToken = $accessToken['access_token'];
+            $this->expiryTime = time() + $accessToken['expires_in'];
+            $this->updateStorageConfig();
+
+        } catch (\Exception $e) {
+            $this->logger->error($e->getMessage(), ['exception' => $e]);
+        }
+
+    }
+
+    public function updateStorageConfig(): void {
+        $this->logger->info("Update Dropbox access token in storage config");
+        try {
+            $GlobalStoragesService = \OC::$server->getGlobalStoragesService();
+            $Storages = $GlobalStoragesService->getAllStorages();
+            foreach ($Storages as $storageConfig) {
+                $data = $storageConfig->getBackend()->jsonSerialize();
+                if ($data['identifier'] === self::APP_NAME) {
+                    $storage = $storageConfig->getBackendOptions();
+                    if ( $this->refreshToken == $storage['refresh_token'] ) {
+                        // Update token and expiry time in storage config
+                        $storage['token'] = $this->accessToken;
+                        $storage['expiry_time'] = $this->expiryTime;
+                        $storageConfig->setBackendOptions($storage);
+                        $storage = $GlobalStoragesService->updateStorage($storageConfig);
+                        $this->logger->info("Access token and expiry time updated in storage config ". $storageConfig->getId());
+                        return;
+                    }
+                }
+            }
+        } catch (\Exception $e) {
+            $this->logger->error($e->getMessage(), ['exception' => $e]);
+        }
     }
 }

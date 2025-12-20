@@ -23,6 +23,7 @@
 namespace OCA\Files_external_dropbox\Backend;
 
 use OCA\Files_External\Lib\Auth\AuthMechanism;
+use OCA\Files_External\Lib\DefinitionParameter;
 use OCP\IL10N;
 
 class Dropbox extends \OCA\Files_External\Lib\Backend\Backend {
@@ -35,16 +36,42 @@ class Dropbox extends \OCA\Files_External\Lib\Backend\Backend {
     public function __construct(IL10N $l) {
         $appWebPath = \OC_App::getAppWebPath('files_external_dropbox');
 
+        $refreshTokenParameter = new DefinitionParameter('refresh_token', $l->t('Refresh Token'));
+        if (defined('DefinitionParameter::FLAG_HIDDEN')) {
+            # Nextcloud >= 30.0.11
+            $refreshTokenParameter
+                ->setType(DefinitionParameter::VALUE_PASSWORD)
+                ->setFlags(DefinitionParameter::FLAG_HIDDEN);
+        } else {
+            # Nextcloud <= 30.0.10
+            $refreshTokenParameter
+                ->setType(DefinitionParameter::VALUE_HIDDEN);
+        }
+
+
+        $expiryTimeParameter = new DefinitionParameter('expiry_time', $l->t('Expiry Time'));
+        if (defined('DefinitionParameter::FLAG_HIDDEN')) {
+            # Nextcloud >= 30.0.11
+            $expiryTimeParameter
+                ->setType(DefinitionParameter::VALUE_PASSWORD)
+                ->setFlags(DefinitionParameter::FLAG_HIDDEN);
+        } else {
+            # Nextcloud <= 30.0.10
+            $expiryTimeParameter
+                ->setType(DefinitionParameter::VALUE_HIDDEN);
+        }
+
         $this
 			->setIdentifier('files_external_dropbox')
 			->addIdentifierAlias('\OC\Files\External_Storage\Dropbox')// legacy compat
 			->setStorageClass('\OCA\Files_external_dropbox\Storage\Dropbox')
 			->setText($l->t('Dropbox V2'))
 			->addParameters([
-
-			])
+                $refreshTokenParameter,
+                $expiryTimeParameter
+            ])
 			->addAuthScheme(AuthMechanism::SCHEME_OAUTH2)
-                        ->addCustomJs("../../../$appWebPath/js/dropbox");
+			->addCustomJs("../../../$appWebPath/js/dropbox");
 	}
 
 }
