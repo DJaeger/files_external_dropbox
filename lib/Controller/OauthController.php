@@ -81,7 +81,8 @@ class OauthController extends Controller {
 			$authHelper = $dropbox->getAuthHelper();
 
 			if ($step === 1) {
-				$authUrl = $authHelper->getAuthUrl($redirect);
+				$params = ["scope"=>"account_info.read files.content.read files.content.write files.metadata.read files.metadata.write"];
+				$authUrl = $authHelper->getAuthUrl($redirect, $params);
 				return new DataResponse([
 					'status' => 'success',
 					'data' => ['url' => $authUrl]
