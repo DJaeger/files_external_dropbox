@@ -55,7 +55,7 @@ Connecting Dropbox with OAuth 2 is a little more work because you have to create
 - After completing the authorization you will be redirect back to the "External storage" page of yout Nextcloud instance and should see a **green** mark along your storage configuration
 - That's it
 	]]></description>
-	<version>1.6.1</version>
+	<version>1.6.2</version>
 	<licence>agpl</licence>
 	<author>Daniel Jäger</author>
 	<author>Robin Appelman</author>
