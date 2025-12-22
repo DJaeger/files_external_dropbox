@@ -37,7 +37,7 @@ class Dropbox extends \OCA\Files_External\Lib\Backend\Backend {
         $appWebPath = \OC_App::getAppWebPath('files_external_dropbox');
 
         $refreshTokenParameter = new DefinitionParameter('refresh_token', $l->t('Refresh Token'));
-        if (defined('DefinitionParameter::FLAG_HIDDEN')) {
+        if (defined('OCA\Files_External\Lib\DefinitionParameter::FLAG_HIDDEN')) {
             # Nextcloud >= 30.0.11
             $refreshTokenParameter
                 ->setType(DefinitionParameter::VALUE_PASSWORD)
@@ -50,7 +50,7 @@ class Dropbox extends \OCA\Files_External\Lib\Backend\Backend {
 
 
         $expiryTimeParameter = new DefinitionParameter('expiry_time', $l->t('Expiry Time'));
-        if (defined('DefinitionParameter::FLAG_HIDDEN')) {
+        if (defined('OCA\Files_External\Lib\DefinitionParameter::FLAG_HIDDEN')) {
             # Nextcloud >= 30.0.11
             $expiryTimeParameter
                 ->setType(DefinitionParameter::VALUE_PASSWORD)
